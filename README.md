@@ -1,1 +1,1 @@
-# bun-typescript-practice
+# Bun Typescript Practice
