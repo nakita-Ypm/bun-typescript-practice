@@ -1,2 +1,5 @@
 exe:
-	bun run index.ts
+	bun run src/index.ts
+
+test:
+	bun test
