@@ -1,5 +1,5 @@
 export class Karabiner {
-  static karabinerDescription(title: string, description: string, result: any[]) {
+  static karabinerDescription(title: string, description: string, result: string[]) {
     return {
       title: title,
       rules: [
@@ -29,7 +29,7 @@ export class Karabiner {
     }
   }
 
-  static jpMode(fromKey: string, toKey: string): any {
+  static jpMode(fromKey: string, toKey: string) {
     return {
       type: 'basic',
       from: {
