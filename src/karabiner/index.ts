@@ -79,4 +79,20 @@ export class Karabiner {
       ],
     }
   }
+
+  static generateMandatoryKeymap(from_layout: string[][], to_layout: string[][], mandatory_keys: string[][]): object[] {
+    const res: object[] = []
+    for (let i = 0; i < from_layout.length; i++) {
+      const row_from = from_layout[i]
+      const row_to = to_layout[i]
+      for (let j = 0; j < row_from.length; j++) {
+        const col_from = row_from[j]
+        const col_to = row_to[j]
+        for (const mandatory of mandatory_keys) {
+          res.push(this.mandatoryKeymap(col_from, col_to, mandatory))
+        }
+      }
+    }
+    return res
+  }
 }

@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test'
 import { Karabiner } from '.'
-import { expected_en_jp_toggle } from './data'
+import { expected_en_jp_toggle, expected_mandatory_keymap } from './data'
 
 // enJpToggle
 test('enJpToggle', () => {
@@ -8,58 +8,6 @@ test('enJpToggle', () => {
     Karabiner.toggle('ja', 'right_command', 'japanese_eisuu', ['any']),
     Karabiner.toggle('en', 'right_command', 'japanese_kana', ['any']),
   ]
-  const expected = [
-    {
-      type: 'basic',
-      conditions: [
-        {
-          input_sources: [
-            {
-              language: 'ja',
-            },
-          ],
-          type: 'input_source_if',
-        },
-      ],
-      from: {
-        key_code: 'right_command',
-        modifiers: {
-          optional: ['any'],
-        },
-      },
-      to: [
-        {
-          key_code: 'japanese_eisuu',
-        },
-      ],
-    },
-    {
-      type: 'basic',
-      conditions: [
-        {
-          input_sources: [
-            {
-              language: 'en',
-            },
-          ],
-          type: 'input_source_if',
-        },
-      ],
-      from: {
-        key_code: 'right_command',
-        modifiers: {
-          optional: ['any'],
-        },
-      },
-      to: [
-        {
-          key_code: 'japanese_kana',
-        },
-      ],
-    },
-  ]
-
-  expect(manipulators).toEqual(expected)
 
   const result = {
     title: 'Change the right command key to toggle between alphanumeric and kana',
@@ -71,5 +19,46 @@ test('enJpToggle', () => {
     ],
   }
 
-  expect(result).toEqual(expected_en_jp_toggle)
+  const expected = expected_en_jp_toggle
+
+  expect(result).toEqual(expected)
+})
+
+//    修飾キー
+const mandatory = [
+  ['command'],
+  ['command', 'shift'],
+  ['control'],
+  ['control', 'shift'],
+  ['option'],
+  ['option', 'shift'],
+]
+
+const programmer_dvorak = [
+  ['semicolon', 'comma', 'period', 'p', 'y', 'f', 'g', 'c', 'r', 'l'],
+  ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's'],
+  ['quote', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],
+]
+
+const qwerty = [
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'quote'],
+  ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'comma', 'period', 'slash'],
+]
+
+test('mandatoryKeymap', () => {
+  const keymap = Karabiner.generateMandatoryKeymap(programmer_dvorak, qwerty, mandatory)
+  const result = {
+    title: 'Programmer Dvorak Qwerty',
+    rules: [
+      {
+        description: 'Programmer Dvorak Qwerty',
+        manipulators: keymap,
+      },
+    ],
+  }
+
+  const expected = expected_mandatory_keymap
+
+  expect(result).toEqual(expected)
 })
