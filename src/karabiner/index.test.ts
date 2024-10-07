@@ -1,38 +1,13 @@
 import { expect, test } from 'bun:test'
 import { Karabiner } from '.'
 
-const toggles = [
-  { lan: 'en', from_key: 'caps_lock', to_key: 'escape', opt: ['any'] },
-  { lan: 'ja', from_key: 'caps_lock', to_key: 'kana', opt: ['any'] },
-]
-
+// enJpToggle
 test('enJpToggle', () => {
-  const result = Karabiner.enJpToggle(toggles)
+  const manipulators = [
+    Karabiner.toggle('ja', 'right_command', 'japanese_eisuu', ['any']),
+    Karabiner.toggle('en', 'right_command', 'japanese_kana', ['any']),
+  ]
   const expected = [
-    {
-      type: 'basic',
-      conditions: [
-        {
-          input_sources: [
-            {
-              language: 'en',
-            },
-          ],
-          type: 'input_source_if',
-        },
-      ],
-      from: {
-        key_code: 'caps_lock',
-        modifiers: {
-          optional: ['any'],
-        },
-      },
-      to: [
-        {
-          key_code: 'escape',
-        },
-      ],
-    },
     {
       type: 'basic',
       conditions: [
@@ -46,24 +21,17 @@ test('enJpToggle', () => {
         },
       ],
       from: {
-        key_code: 'caps_lock',
+        key_code: 'right_command',
         modifiers: {
           optional: ['any'],
         },
       },
       to: [
         {
-          key_code: 'kana',
+          key_code: 'japanese_eisuu',
         },
       ],
     },
-  ]
-  expect(result).toEqual(expected)
-})
-
-test('enJpToggle json', () => {
-  const input = Karabiner.enJpToggle(toggles)
-  const expected = [
     {
       type: 'basic',
       conditions: [
@@ -77,44 +45,89 @@ test('enJpToggle json', () => {
         },
       ],
       from: {
-        key_code: 'caps_lock',
+        key_code: 'right_command',
         modifiers: {
           optional: ['any'],
         },
       },
       to: [
         {
-          key_code: 'escape',
-        },
-      ],
-    },
-    {
-      type: 'basic',
-      conditions: [
-        {
-          input_sources: [
-            {
-              language: 'ja',
-            },
-          ],
-          type: 'input_source_if',
-        },
-      ],
-      from: {
-        key_code: 'caps_lock',
-        modifiers: {
-          optional: ['any'],
-        },
-      },
-      to: [
-        {
-          key_code: 'kana',
+          key_code: 'japanese_kana',
         },
       ],
     },
   ]
 
-  const result = JSON.stringify(input)
-  console.log(result)
-  expect(result).toEqual(JSON.stringify(expected))
+  expect(manipulators).toEqual(expected)
+
+  const result = {
+    title: 'Change the right command key to toggle between alphanumeric and kana',
+    rules: [
+      {
+        description: 'Kana Eisuu Toggle right_command',
+        manipulators: manipulators,
+      },
+    ],
+  }
+
+  const expected_karabiner = {
+    title: 'Change the right command key to toggle between alphanumeric and kana',
+    rules: [
+      {
+        description: 'Kana Eisuu Toggle right_command',
+        manipulators: [
+          {
+            type: 'basic',
+            conditions: [
+              {
+                input_sources: [
+                  {
+                    language: 'ja',
+                  },
+                ],
+                type: 'input_source_if',
+              },
+            ],
+            from: {
+              key_code: 'right_command',
+              modifiers: {
+                optional: ['any'],
+              },
+            },
+            to: [
+              {
+                key_code: 'japanese_eisuu',
+              },
+            ],
+          },
+          {
+            type: 'basic',
+            conditions: [
+              {
+                input_sources: [
+                  {
+                    language: 'en',
+                  },
+                ],
+                type: 'input_source_if',
+              },
+            ],
+            from: {
+              key_code: 'right_command',
+              modifiers: {
+                optional: ['any'],
+              },
+            },
+            to: [
+              {
+                key_code: 'japanese_kana',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(result).toEqual(expected_karabiner)
 })

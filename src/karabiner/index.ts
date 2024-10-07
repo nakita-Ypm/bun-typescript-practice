@@ -79,8 +79,4 @@ export class Karabiner {
       ],
     }
   }
-
-  static enJpToggle(toggles: { lan: string; from_key: string; to_key: string; opt: string[] }[]) {
-    return toggles.map((key) => this.toggle(key.lan, key.from_key, key.to_key, key.opt))
-  }
 }
