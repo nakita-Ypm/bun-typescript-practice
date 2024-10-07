@@ -3,3 +3,7 @@ exe:
 
 test:
 	bun test
+
+# format
+fmt:
+	bunx biome format --write ./
